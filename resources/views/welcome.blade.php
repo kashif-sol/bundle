@@ -26,19 +26,22 @@
                         <br>
                     </div>
                     <div class="card-body">
-                        <form action="save-product" method="post">
+                        <form name="contactUsForm" id="contactUsForm" method="post" action="javascript:void(0)">
                             @sessionToken
                             <label for="">Main Product</label><br>
-                            <input type="text" id="main" onkeyup="myFunction()" class="form-control">
+                            <input type="text" id="main" onfocusout="myFunction()" class="form-control">
                             <input type="hidden" id="hidden" name="product_id" value="">
                             <input type="text" id="title" class="form-control title" name="title" value=""
                                 readonly>
                             <br>
+                            <div class="rowbtn">
+                                <button type="submit" class="btn btn-primary" id="submit"
+                                    onclick="saveprod()">Save</button>
+                                <button type="button" class="btn btn-secondary add-more" data-toggle="modal"
+                                    data-target="#exampleModalLong">Add
+                                    More</button>
+                            </div>
 
-                            <button type="submit" class="btn btn-primary" id="save">Save</button>
-                            <button type="button" class="btn btn-secondary ml-3" data-toggle="modal"
-                                data-target="#exampleModalLong">Add
-                                More</button>
                         </form>
                     </div>
 
@@ -61,22 +64,22 @@
                                 <div class="col-sm-12" style="text-align:center;">
                                     @sessionToken
                                     <label for="sku">Enter Sku</label>
-                                    <input type="text" id="sku" onkeyup="popupFunction()" class="form-control"
+                                    <input type="text" id="sku" onfocusout="popupFunction()" class="form-control"
                                         style="margin-left:35%">
                                 </div>
                             </div>
-                            <form action="action="save-product" method="post"">
-                            <div id="dynamic_field">
-                                @sessionToken
-                               
-                            </div>
-                        
-
+                            <form action="{{ url('save-product') }}" method="post"">
+                                <div id="dynamic_field">
+                                    @sessionToken
+                                    <input type="hidden" name="main_prod" id="main-prod" class="main-prod" value="">
+                                </div>
+                                <button type="submit" class="btn btn-secondary">Save </button>
+                            </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-secondary">Save </button>
-                        </form>
+
+
                         </div>
                     </div>
                 </div>
@@ -99,7 +102,10 @@
         });
     </script>
     <script>
+        
+
         function myFunction() {
+
             var id = $('#main').val();
             console.log(id);
             var token = $('.session-token').val();
@@ -129,7 +135,15 @@
                         $(".title").val($(".title").val() + '');
                         console.log('xy');
                     }
+                    if (response && response.length > 0) {
+                        console.log('y');
+                        $(".main-prod").val($(".main-prod").val() + response[1].id);
 
+                    } else {
+                        $(".title").val($(".title").val() + '');
+                        console.log('xy');
+                    }
+                    
 
                 }
 
@@ -152,26 +166,64 @@
                     token: token
                 },
                 success: function(response) {
-                    //if request if made successfully then the response represent the data
-
                     console.log(response);
                     $('#dynamic_field').append(
                         '<div class="row" id="row"><p class="col-sm-4">title</p><p class="col-sm-4">Id</p><p class="col-sm-4">Order</p></div>'
-                        )
+                    )
                     for (i = 0; i < response.length; i++) {
                         $('#dynamic_field').append('<div class="row" id="row' + i +
-                            '"><input type="text" name="title"  class="col-sm-4 form-control" style="margin-left:5px;padding:10px"  value="' +
+                            '"><input type="text" name="title[]" readonly  class="col-sm-3 form-control" style="margin-left:5px;padding:10px"  value="' +
                             response[i].title +
-                            '"  >&nbsp;<input type="text" name="product_id" class="col-sm-4 form-control"  style="margin-left:5px;padding:10px" value="' +
+                            '"  >&nbsp;<input type="text" name="product_id[]" readonly class="col-sm-3 form-control"  style="margin-left:5px;padding:10px" value="' +
                             response[i].id +
-                            '"   >&nbsp<input type="text" name="order" class="col-sm-4 form-control" style="margin-left:5px;padding:10px" value="" ></div>'
-                            )
+                            '"   >&nbsp<input type="hidden" name="handle[]" readonly class="col-sm-3 form-control"  style="margin-left:5px;padding:10px" value="' +
+                            response[i].handle +
+                            '"   >&nbsp<input type="text" name="order[]"  class="col-sm-3 form-control" style="margin-left:5px;padding:10px" value="" ></div>'
+                        )
                     }
 
                 }
 
 
             });
+        }
+    </script>
+    <script>
+      $('.add-more').hide();
+        function saveprod() {
+            
+            console.log('helo');
+            if ($("#contactUsForm").length > 0) {
+                console.log('he');
+                $.ajax({
+                    url: "{{ url('save-prod') }}",
+                    type: "POST",
+                    data: $('#contactUsForm').serialize(),
+                    success: function(response) {
+                        console.log(response);
+                        alert('Product has been Saved');
+                        $('.add-more').show();
+                        if (response && response.length > 0) {
+                            console.log('y');
+                            $(".main-prod").val($(".main-prod").val() + response.prod_id);
+
+                        } else {
+                            console.log('xy');
+                        }
+                        if (response && response.length > 0) {
+                            console.log('y');
+                            $(".title").val($(".title").val() + response.title);
+
+                        } else {
+                            $(".title").val($(".title").val() + '');
+                            console.log('xy');
+                        }
+                        
+
+                    }
+                });
+            }
+
         }
     </script>
 @endsection

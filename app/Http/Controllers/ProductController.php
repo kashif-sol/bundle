@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
-   public function index(Request $request){
+  public function index(Request $request)
+  {
 
     $shop = Auth::user();
-    
-    $query='query {
-      products(query: "sku:'.$request->product.'", first: 30) {
+
+    $query = 'query {
+      products(query: "sku:' . $request->product . '", first: 30) {
           edges {
             node {
               id
@@ -30,43 +32,44 @@ class ProductController extends Controller
           }
         }
       }';
-      $products=$shop->api()->graph($query);
-      
-      $product=$products['body']->container['data']['products']['edges'];
-      // dd($product);
-      $arr=[];
-      foreach($product as $product)
-      {
-       
-        // if($product->node['title']==$request->product){
-            $title=[
-                'title'=>$product['node']['title']
-            ];
-            array_push($arr,$title);
-            $id=[
-                'id'=>$product['node']['id']
-            ];
-            array_push($arr,$id);
-            
-        //     return response($arr);
-        // }
-        // else{
-        //     return response('No product Found');
-        // }
-        
-      }
-      return response($arr);
-   }
-   public function sku(Request $request){
+    $products = $shop->api()->graph($query);
+
+    $product = $products['body']->container['data']['products']['edges'];
+    // dd($product);
+    $arr = [];
+    foreach ($product as $product) {
+
+      // if($product->node['title']==$request->product){
+      $title = [
+        'title' => $product['node']['title']
+      ];
+      array_push($arr, $title);
+      $id = [
+        'id' => $product['node']['id']
+      ];
+      array_push($arr, $id);
+
+      //     return response($arr);
+      // }
+      // else{
+      //     return response('No product Found');
+      // }
+
+    }
+    return response($arr);
+  }
+  public function sku(Request $request)
+  {
     // dd('x');
     $shop = Auth::user();
-    
-    $query='query {
-      products(query: "sku:'.$request->product.'", first: 30) {
+
+    $query = 'query {
+      products(query: "sku:' . $request->product . '", first: 30) {
           edges {
             node {
               id
-              title  
+              title
+              handle  
               variants(first: 10, reverse: true) {
                 edges {
                   node {
@@ -80,23 +83,35 @@ class ProductController extends Controller
           }
         }
       }';
-      $products=$shop->api()->graph($query);
-      
-      $product=$products['body']->container['data']['products']['edges'];
-      $response=$product[0]['node']['variants']['edges'];
-      $res=[];
-      foreach($response as $data){
-        // dd($data['node']['id']);
-        $title=[
-          'title'=>$data['node']['title'],
-          'id'=>$data['node']['id']
+    $products = $shop->api()->graph($query);
+
+    $product = $products['body']->container['data']['products']['edges'];
+    $handle = $product[0]['node']['handle'];
+    $response = $product[0]['node']['variants']['edges'];
+    $res = [];
+    foreach ($response as $data) {
+      // dd($data['node']['id']);
+      $title = [
+        'title' => $data['node']['title'],
+        'id' => $data['node']['id'],
+        'handle' => $handle,
       ];
-        array_push($res,$title);
-       
-      }
-//  dd($res);
-        
-      
-      return response($res);
-   }
+      array_push($res, $title);
+    }
+    return response($res);
+  }
+  public function prod_save(Request $req)
+  {
+    // dd($req->all());
+    $save = Product::create([
+
+      'prod_id' => $req->product_id,
+      'title' => $req->title,
+
+
+
+    ]);
+    $save->save();
+    return response($save);
+  }
 }

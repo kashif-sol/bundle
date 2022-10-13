@@ -14,12 +14,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::group(['middleware' => 'verify.shopify'], function () {
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
-Route::post('product',[ProductController::class,'index']);
-Route::post('sku',[ProductController::class,'sku']);
-Route::post('save-product',[MasterProductController::class,'index']);
-// Route::post('all-product',[ProductController::class,'index']);
+    Route::get('/', [MasterProductController::class, 'bundle'])->name('home');
+    Route::get('create-bundle', [MasterProductController::class, 'createbundle']);
+    Route::delete('bundle/{id}', [MasterProductController::class, 'destroy'])->name('bundle.destroy');
+    Route::post('product', [ProductController::class, 'index']);
+
+    Route::post('sku', [ProductController::class, 'sku']);
+    Route::post('save-prod', [ProductController::class, 'prod_save']);
+    Route::post('save-product', [MasterProductController::class, 'index']);
 });

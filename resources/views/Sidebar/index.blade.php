@@ -17,12 +17,7 @@
                         <span>Dashboard</span>
                     </a>                        
                 </li>
-                <li>
-                    <a class="nav-link" href="{{url('/profiles')}}">
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                        <span>Profiles</span>
-                    </a>                        
-                </li>
+                
               
                 <!-- <li class="nav-group-label">APPs</li>
                 <li class="nav-parent nav-expanded nav-active">
