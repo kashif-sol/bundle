@@ -5,6 +5,9 @@
         td {
             text-align: center;
         }
+        html {
+    font-size: 13px;
+}
     </style>
     <section role="main" class="content-body content-body-modern">
         <div class="card">
@@ -25,21 +28,17 @@
 
             <div class="card-body">
                 <div class="card-header">
-                    <h1
-                        style="margin-top: 20px;
-                margin-bottom: 10px;
-                color: black;
-                font-size: larger;
-                font-size: 19px;
-                padding-left: 45px;">
-                        Bundles</h1>
-                </div>
+                        
+                        <h2 class="card-title">Dashboard</h2><br>
+                        <br>
+                    </div>
                 <table class="table table-striped">
                     <tr>
                         <th scope="col">Title</th>
-                        
+
                         <th scope="col">Action</th>
                     </tr>
+
                     <tbody>
                         @if (!isset($bundle))
                             <tr>
@@ -49,10 +48,14 @@
                             @foreach ($bundle as $product)
                                 <tr>
                                     <td>{{ $product->title }}</td>
-                                   
-
-                                    <td><button class=" btn btn-primary deleteRecord"
-                                            data-id="{{ $product->id }}">Delete</button></td>
+                                    <td>
+                                        <button class=" btn btn-secondary deleteRecord"
+                                            data-id="{{ $product->id }}">Delete</button>
+                                        {{-- <a href="javascript:void(0)" id="show-product"
+                                            data-url="{{ route('bundle.view', $product->prod_id) }}"
+                                            class="btn btn-info">Show</a> --}}
+                                            <a href="{{ url('create-bundle') }}/{{$product->id}}"  class="btn btn-primary">View</a>
+                                    </td>
                                 </tr>
                             @endforeach
                         @endif
@@ -60,6 +63,10 @@
                 </table>
             </div>
         </div>
+        <div class="display">
+
+        </div>
+      
     </section>
     <script>
         $(".deleteRecord").click(function() {
@@ -76,6 +83,38 @@
                     console.log(response);
                     window.location.reload();
                 }
+            });
+
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            /*------------------------------------------
+            --------------------------------------------
+            When click user on Show Button
+        
+            --------------------------------------------
+            --------------------------------------------*/
+            
+            $('body').on('click', '#show-product', function() {
+
+                var userURL = $(this).data('url');
+                $.ajax({
+                    url: userURL,
+                    type: 'get',
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log(response);
+                        $('.display').append('<table class="table table-striped" id="alldata" ></table>')
+                        for (i = 0; i < response.length; i++) {
+
+                        $('#alldata').append('<tr id="row' + i + '"><td>' + response[i].title +'</td><td>' + response[i].main_prod + '</td></tr>'
+                        )
+                        }
+                    }
+                });
+
             });
 
         });

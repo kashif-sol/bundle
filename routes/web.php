@@ -17,8 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => 'verify.shopify'], function () {
     Route::get('/', [MasterProductController::class, 'bundle'])->name('home');
-    Route::get('create-bundle', [MasterProductController::class, 'createbundle']);
+    Route::get('create-bundle/{id?}', [MasterProductController::class, 'createbundle']);
     Route::delete('bundle/{id}', [MasterProductController::class, 'destroy'])->name('bundle.destroy');
+    Route::get('productview/{id?}', [MasterProductController::class, 'view'])->name('bundle.view');
     Route::post('product', [ProductController::class, 'index']);
 
     Route::post('sku', [ProductController::class, 'sku']);

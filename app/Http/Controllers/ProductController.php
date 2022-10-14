@@ -45,7 +45,7 @@ class ProductController extends Controller
       ];
       array_push($arr, $title);
       $id = [
-        'id' => $product['node']['id']
+        'id' => (int) filter_var($product['node']['id'], FILTER_SANITIZE_NUMBER_INT)
       ];
       array_push($arr, $id);
 
@@ -93,7 +93,7 @@ class ProductController extends Controller
       // dd($data['node']['id']);
       $title = [
         'title' => $data['node']['title'],
-        'id' => $data['node']['id'],
+        'id' => (int) filter_var($data['node']['id'], FILTER_SANITIZE_NUMBER_INT),
         'handle' => $handle,
       ];
       array_push($res, $title);

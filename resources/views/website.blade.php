@@ -45,6 +45,14 @@
 		<!-- Head Libs -->
 		<script src="{{asset('ThemeData/vendor/modernizr/modernizr.js')}}"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<style>
+			media screen and (max-width: 1280px) and (max-height: 720px) {
+   html {
+      transform: scale(.5);   
+      // or simply zoom: 100%
+   }
+}
+		</style>
 	</head>
 	<body>
 		<section class="body">
