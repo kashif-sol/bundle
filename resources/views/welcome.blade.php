@@ -56,6 +56,7 @@ table{
                                         <th scope="col">Variant title</th>
                                         <th scope="col">Id</th>
                                         <th scope="col">handle</th>
+                                        <th scope="col">Actions</th>
                                     </tr>
                                     <tbody>
                                         @foreach ($bundle_products as $bundleee)
@@ -63,6 +64,8 @@ table{
                                             <td>{{$bundleee->title}}</td>
                                             <td>{{$bundleee->product_id}}</td>
                                             <td>{{$bundleee->handle}}</td>
+                                            <td><button class=" btn btn-secondary deleteRecord"
+                                                data-id="{{ $bundleee->id }}">Delete</button></td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -187,6 +190,26 @@ table{
 
             });
         }
+        
+    </script>
+    <script>
+          $(".deleteRecord").click(function() {
+            var id = $(this).data("id");
+
+
+            $.ajax({
+                url: "/variant/" + id,
+                type: 'DELETE',
+                data: {
+                    "id": id,
+                },
+                success: function(response) {
+                    console.log(response);
+                    window.location.reload();
+                }
+            });
+
+        });
     </script>
     <script>
         function popupFunction() {

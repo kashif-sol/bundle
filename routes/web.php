@@ -21,8 +21,9 @@ Route::group(['middleware' => 'verify.shopify'], function () {
     Route::delete('bundle/{id}', [MasterProductController::class, 'destroy'])->name('bundle.destroy');
     Route::get('productview/{id?}', [MasterProductController::class, 'view'])->name('bundle.view');
     Route::post('product', [ProductController::class, 'index']);
-
+    
     Route::post('sku', [ProductController::class, 'sku']);
     Route::post('save-prod', [ProductController::class, 'prod_save']);
     Route::post('save-product', [MasterProductController::class, 'index']);
+    Route::delete('variant/{id}', [MasterProductController::class, 'destroy_variant'])->name('variant.destroy');
 });

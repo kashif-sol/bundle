@@ -69,15 +69,16 @@ class MasterProductController extends Controller
                 $old_products = $bunle_row->handle;
             }
         }
-
+        // dd(json_encode($final_products));
         $shop  = User::first();
         $metafields["metafield"] = array(
             "id" => 735379628,
             "value" => json_encode($final_products),
             "type" => "json"
         );
+        // dd($metafields);
         $products = $shop->api()->rest("PUT" , "/admin/api/2022-07/products/".$product_id."/metafields/21457851809964.json" , $metafields);
-      
+   
         return back();
     }
     public function bundle()
@@ -109,6 +110,14 @@ class MasterProductController extends Controller
     public function destroy($id)
     {
         Product::find($id)->delete($id);
+
+        return response()->json([
+            'success' => 'Record deleted successfully!'
+        ]);
+    }
+    public function destroy_variant($id)
+    {
+        Masterproduct::find($id)->delete($id);
 
         return response()->json([
             'success' => 'Record deleted successfully!'
