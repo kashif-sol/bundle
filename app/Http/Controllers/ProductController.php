@@ -60,7 +60,7 @@ class ProductController extends Controller
   }
   public function sku(Request $request)
   {
-    // dd('x');
+    // dd($request);
     $shop = Auth::user();
 
     $query = 'query {
@@ -84,6 +84,7 @@ class ProductController extends Controller
         }
       }';
     $products = $shop->api()->graph($query);
+    // dd($products);
 
     $product = $products['body']->container['data']['products']['edges'];
     $handle = $product[0]['node']['handle'];

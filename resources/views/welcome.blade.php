@@ -65,7 +65,6 @@
                                 <div class="prod_data">
                                     <table class="table table-striped">
                                         <tr>
-                                            <th scope="col">Variant title</th>
                                             <th scope="col">Id</th>
                                             <th scope="col">handle</th>
                                             <th scope="col">Actions</th>
@@ -73,8 +72,7 @@
                                         <tbody>
                                             @foreach ($bundle_products as $bundleee)
                                                 <tr>
-                                                    <td>{{ $bundleee->title }}</td>
-                                                    <td>{{ $bundleee->product_id }}</td>
+                                                     <td>{{ $bundleee->product_id }}</td>
                                                     <td>{{ $bundleee->handle }}</td>
                                                     <td><button class=" btn btn-secondary deleteRecord"
                                                             data-id="{{ $bundleee->id }}">Delete</button></td>
@@ -249,8 +247,8 @@
                     token: token
                 },
                 success: function(response) {
-                    console.log(response[1].prod_id);
-                    if(prod_id==response[1].prod_id){
+                    console.log(response);
+                    if(prod_id==response[0].prod_id){
                         alert('Product is already available');
                     }
                     else{
