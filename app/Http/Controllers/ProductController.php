@@ -87,11 +87,12 @@ class ProductController extends Controller
 
     $product = $products['body']->container['data']['products']['edges'];
     $handle = $product[0]['node']['handle'];
+    $prod_id=$product[0]['node']['id'];
     $response = $product[0]['node']['variants']['edges'];
     $res = [];
     foreach ($response as $data) {
-      // dd($data['node']['id']);
       $title = [
+        'prod_id'=>(int) filter_var($prod_id, FILTER_SANITIZE_NUMBER_INT),
         'title' => $data['node']['title'],
         'id' => (int) filter_var($data['node']['id'], FILTER_SANITIZE_NUMBER_INT),
         'handle' => $handle,
